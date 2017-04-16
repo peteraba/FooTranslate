@@ -9,6 +9,14 @@
         "phpunit/phpunit": "^6.1"
     },
     "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Foo\\I18n\\": [
+                "src/",
+                "tests/"
+            ]
+        }
+    },
     "authors": [
         {
             "name": "Peter Aba",
