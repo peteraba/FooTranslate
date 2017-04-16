@@ -1,6 +1,6 @@
 <?php
 
-namespace Foo\I18n;
+namespace Foo\Translate;
 
 use PHPUnit\Framework\TestCase;
 

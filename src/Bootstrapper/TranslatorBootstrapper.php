@@ -1,15 +1,15 @@
 <?php
 
-namespace Foo\I18n\Bootstrapper;
+namespace Foo\Translate\Bootstrapper;
 
-use Foo\I18n\ITranslator;
-use Foo\I18n\Translator;
+use Foo\Translate\ITranslator;
+use Foo\Translate\Translator;
 use Opulence\Framework\Configuration\Config;
 use Opulence\Ioc\Bootstrappers\Bootstrapper;
 use Opulence\Ioc\IContainer;
 use Opulence\Views\Compilers\Fortune\ITranspiler;
 
-class I18nBootstrapper extends Bootstrapper
+class TranslatorBootstrapper extends Bootstrapper
 {
     const DEFAULT_LANGUAGE = 'DEFAULT_LANGUAGE';
 

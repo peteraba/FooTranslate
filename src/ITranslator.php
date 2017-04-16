@@ -1,6 +1,6 @@
 <?php
 
-namespace Foo\I18n;
+namespace Foo\Translate;
 
 interface ITranslator
 {

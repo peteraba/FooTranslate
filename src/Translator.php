@@ -1,6 +1,6 @@
 <?php
 
-namespace Foo\I18n;
+namespace Foo\Translate;
 
 class Translator implements ITranslator
 {

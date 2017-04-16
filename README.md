@@ -1,5 +1,5 @@
-FooI18n
-=======
+FooTranslate
+============
 
 Library to make using translations in Opulence easy.
 
@@ -18,9 +18,8 @@ Add the bootstrapper to you application:
 # config/bootstrappers.php
 
 return [
-    RequestBootstrapper::class,
     // ...
-    Foo\I18n\Bootstrapper\I18nBootstrapper::class,
+    Foo\Translate\Bootstrapper\TranslatorBootstrapper::class,
 ];
 ```
 
