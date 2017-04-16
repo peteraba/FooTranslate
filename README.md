@@ -1,7 +1,7 @@
 FooTranslate
 ============
 
-Library to make using translations in Opulence easy.
+Library for making international applications in Opulence easy.
 
 
 Setup
