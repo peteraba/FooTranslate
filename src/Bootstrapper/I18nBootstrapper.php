@@ -11,6 +11,8 @@ use Opulence\Views\Compilers\Fortune\ITranspiler;
 
 class I18nBootstrapper extends Bootstrapper
 {
+    const DEFAULT_LANGUAGE = 'DEFAULT_LANGUAGE';
+
     public function run(ITranspiler $transpiler, Translator $translator)
     {
         $transpiler->registerViewFunction(
@@ -28,12 +30,11 @@ class I18nBootstrapper extends Bootstrapper
     {
         $translator = new Translator();
 
-
-
-        $lang = getenv(\Wigez\Application\Constant\Env::DEFAULT_LANGUAGE);
+        $lang = getenv(static::DEFAULT_LANGUAGE);
         $dir  = sprintf('%s/%s/', Config::get('paths', 'resources.lang'), $lang);
 
         foreach (scandir($dir) as $file) {
+            // Skip non-PHP files
             if (strlen($file) < 4 || substr($file, -4) !== '.php') {
                 continue;
             }
@@ -44,7 +45,6 @@ class I18nBootstrapper extends Bootstrapper
 
         $translator->setLang($lang);
 
-        $container->bindInstance(Translator::class, $translator);
         $container->bindInstance(ITranslator::class, $translator);
     }
 }
