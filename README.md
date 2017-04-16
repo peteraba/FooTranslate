@@ -10,7 +10,7 @@ Setup
 Install the library via composer:
 
 ```
-composer install peteraba/foo-i18n
+composer install peteraba/foo-translate
 ```
 
 Add the bootstrapper to you application:
