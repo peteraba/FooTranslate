@@ -75,7 +75,25 @@ class TranslatorTest extends TestCase
         $this->sut->setLang($lang);
 
         array_unshift($args, $key);
+
         $actualResult = call_user_func_array([$this->sut, 'translate'], $args);
+
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    /**
+     * @dataProvider translateDataProvider
+     *
+     * @param string $lang
+     * @param string $key
+     * @param array  $args
+     * @param string $expectedResult
+     */
+    public function testTranslateByArgs(string $lang, string $key, array $args, string $expectedResult)
+    {
+        $this->sut->setLang($lang);
+
+        $actualResult = $this->sut->translateByArgs($key, $args);
 
         $this->assertSame($expectedResult, $actualResult);
     }
