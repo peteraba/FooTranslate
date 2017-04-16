@@ -54,7 +54,7 @@ return [
 ];
 ```
 
-**src/Project/Form/Login**
+**src/Project/Form/Login.php**
 ```php
 class Login
 {
