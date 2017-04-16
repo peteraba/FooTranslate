@@ -57,15 +57,24 @@ return [
 
 **src/Project/Form/Login**
 ```php
-class Login {
+class Login
+{
+    /**
+     * @param ITranslator $translator
+     * @param string      $entityName
+     */
     public function __construct(ITranslator $translator, string $entityName)
     {
         $this->translator = $translator;
         $this->entityName = $entityName;
     }
+
+    /**
+     * @return Button
+     */
     public function createSaveButton(): Button
     {
-        return new Button($this->translator('form:createNewLabel'. $this->entityName);
+        return new Button($this->translator->translate('form:createNewLabel', $this->entityName));
     }
 }
 ```
