@@ -17,7 +17,7 @@ class TranslatorBootstrapper extends Bootstrapper
     {
         $transpiler->registerViewFunction(
             'tr',
-            function (string $key, ...$args) use ($translator) {
+            function(string $key, ...$args) use ($translator) {
                 return $translator->translateByArgs($key, $args);
             }
         );
