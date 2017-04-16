@@ -80,7 +80,7 @@ class Login
 
 **resources/views/forms/login.fortune.php**
 ```php
-<button>{{ tr("form::createNewLabel", $entityName) }}</button>
+<button>{{ tr("form:createNewLabel", $entityName) }}</button>
 ```
 
 
