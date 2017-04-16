@@ -1,0 +1,18 @@
+{
+    "name": "peteraba/foo-i18n",
+    "description": "Internationalization package for Opulence",
+    "type": "library",
+    "require": {
+        "opulence/opulence": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Aba",
+            "email": "peter@peteraba.com"
+        }
+    ]
+}
