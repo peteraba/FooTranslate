@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Foo\Translate;
 
 use PHPUnit\Framework\TestCase;
@@ -10,22 +12,27 @@ class TranslatorTest extends TestCase
     protected $sut;
 
     /** @var array */
-    protected $translations = [
-        'en' => [
-            'joe'     => 'Joe',
-            'charles' => 'Charles: %s %d'
-        ],
-        'hu' => [
-            'joe'     => 'József',
-            'charles' => 'Károly: %s %d'
-        ],
-    ];
+    protected $translations
+        = [
+            'en' => [
+                'application' => [
+                    'joe' => 'Joe',
+                    'charles' => 'Charles: %s %d'
+                ]
+            ],
+            'hu' => [
+                'application' => [
+                    'joe' => 'József',
+                    'charles' => 'Károly: %s %d'
+                ]
+            ],
+        ];
 
     public function setUp()
     {
         $this->sut = new Translator();
 
-        $this->sut->setTranslations($this->translations['en'], '','en');
+        $this->sut->setTranslations($this->translations['en'], '', 'en');
         $this->sut->setTranslations($this->translations['hu'], '', 'hu');
     }
 
@@ -37,27 +44,33 @@ class TranslatorTest extends TestCase
         return [
             'en-simple' => [
                 'en',
-                'joe',
+                'application:joe',
                 [],
                 'Joe',
             ],
             'en-with-arguments' => [
                 'en',
-                'charles',
+                'application:charles',
                 ['foo', 6],
                 'Charles: foo 6',
             ],
             'hu-simple' => [
                 'hu',
-                'joe',
+                'application:joe',
                 [],
                 'József'
             ],
             'hu-with-arguments' => [
                 'hu',
-                'charles',
+                'application:charles',
                 ['foo', 6],
                 'Károly: foo 6'
+            ],
+            'hu-with-argument-translation' => [
+                'hu',
+                'application:charles',
+                ['{{application:joe}}', 42],
+                'Károly: József 42'
             ],
         ];
     }
@@ -70,7 +83,7 @@ class TranslatorTest extends TestCase
      * @param array  $args
      * @param string $expectedResult
      */
-    public function testTranslate(string $lang, string $key, array $args, string $expectedResult)
+    public function testTranslateCanTranslate(string $lang, string $key, array $args, string $expectedResult)
     {
         $this->sut->setLang($lang);
 
@@ -91,6 +104,62 @@ class TranslatorTest extends TestCase
      */
     public function testTranslateByArgs(string $lang, string $key, array $args, string $expectedResult)
     {
+        $this->sut->setLang($lang);
+
+        $actualResult = $this->sut->translateByArgs($key, $args);
+
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    public function testTranslateByArgsHandlesMissingLanguageGracefully()
+    {
+        $lang           = 'foo';
+        $key            = 'application:joe';
+        $args           = [];
+        $expectedResult = '{{language is missing: foo}}';
+
+        $this->sut->setLang($lang);
+
+        $actualResult = $this->sut->translateByArgs($key, $args);
+
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    public function testTranslateByArgsHandlesMissingTranslationGracefully()
+    {
+        $lang           = 'en';
+        $key            = 'application:bill';
+        $args           = [];
+        $expectedResult = '{{translation is missing: application:bill}}';
+
+        $this->sut->setLang($lang);
+
+        $actualResult = $this->sut->translateByArgs($key, $args);
+
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    public function testTranslateByArgsHandlesAmbiguousTranslationGracefully()
+    {
+        $lang           = 'en';
+        $key            = 'application';
+        $args           = [];
+        $expectedResult = '{{translation is ambiguous: application}}';
+
+        $this->sut->setLang($lang);
+
+        $actualResult = $this->sut->translateByArgs($key, $args);
+
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    public function testTranslateByArgsHandlesInsufficientArgumentsGracefully()
+    {
+        $lang           = 'en';
+        $key            = 'application:charles';
+        $args           = [];
+        $expectedResult = '{{translation argument list failure: application:charles}}';
+
         $this->sut->setLang($lang);
 
         $actualResult = $this->sut->translateByArgs($key, $args);

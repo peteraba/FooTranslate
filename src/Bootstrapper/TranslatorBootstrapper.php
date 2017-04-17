@@ -1,18 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Foo\Translate\Bootstrapper;
 
 use Foo\Translate\ITranslator;
 use Foo\Translate\Translator;
-use Opulence\Framework\Configuration\Config;
 use Opulence\Ioc\Bootstrappers\Bootstrapper;
 use Opulence\Ioc\IContainer;
 use Opulence\Views\Compilers\Fortune\ITranspiler;
 
 class TranslatorBootstrapper extends Bootstrapper
 {
-    const DEFAULT_LANGUAGE = 'DEFAULT_LANGUAGE';
-
     /**
      * @param ITranspiler $transpiler
      * @param Translator  $translator
@@ -33,23 +32,6 @@ class TranslatorBootstrapper extends Bootstrapper
     public function registerBindings(IContainer $container)
     {
         $translator = new Translator();
-
-        $lang = getenv(static::DEFAULT_LANGUAGE);
-        $dir  = sprintf('%s/%s/', Config::get('paths', 'resources.lang'), $lang);
-
-        if (is_dir($dir)) {
-            foreach (scandir($dir) as $file) {
-                // Skip non-PHP files
-                if (strlen($file) < 4 || substr($file, -4) !== '.php') {
-                    continue;
-                }
-
-                $content = require $dir . $file;
-                $translator->setTranslations($content, substr($file, 0, -4), $lang);
-            }
-        }
-
-        $translator->setLang($lang);
 
         $container->bindInstance(ITranslator::class, $translator);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Foo\Translate\Bootstrapper;
 
 use Foo\Translate\ITranslator;
