@@ -13,18 +13,22 @@ class TranslatorBootstrapper extends Bootstrapper
 {
     const DEFAULT_LANGUAGE = 'DEFAULT_LANGUAGE';
 
+    /**
+     * @param ITranspiler $transpiler
+     * @param Translator  $translator
+     */
     public function run(ITranspiler $transpiler, Translator $translator)
     {
         $transpiler->registerViewFunction(
             'tr',
-            function(string $key, ...$args) use ($translator) {
+            function (string $key, ...$args) use ($translator) {
                 return $translator->translateByArgs($key, $args);
             }
         );
     }
 
     /**
-     * @inheritdoc
+     * @param IContainer $container
      */
     public function registerBindings(IContainer $container)
     {
@@ -33,14 +37,16 @@ class TranslatorBootstrapper extends Bootstrapper
         $lang = getenv(static::DEFAULT_LANGUAGE);
         $dir  = sprintf('%s/%s/', Config::get('paths', 'resources.lang'), $lang);
 
-        foreach (scandir($dir) as $file) {
-            // Skip non-PHP files
-            if (strlen($file) < 4 || substr($file, -4) !== '.php') {
-                continue;
-            }
+        if (is_dir($dir)) {
+            foreach (scandir($dir) as $file) {
+                // Skip non-PHP files
+                if (strlen($file) < 4 || substr($file, -4) !== '.php') {
+                    continue;
+                }
 
-            $content = require $dir . $file;
-            $translator->setTranslations($content, substr($file, 0, -4), $lang);
+                $content = require $dir . $file;
+                $translator->setTranslations($content, substr($file, 0, -4), $lang);
+            }
         }
 
         $translator->setLang($lang);
