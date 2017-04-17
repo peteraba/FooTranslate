@@ -5,12 +5,10 @@ build:
       ini:
         'date.timezone': 'Europe/Berlin'
   dependencies:
+  tests:
     before:
       - composer install
-  tests:
-    override:
-      -
-    command: ./vendor/bin/phpunit --coverage-clover=my-coverage-file
+      - ./vendor/bin/phpunit --coverage-clover=my-coverage-file
     coverage:
       file: my-coverage-file
       format: php-clover
