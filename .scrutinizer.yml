@@ -6,7 +6,7 @@ build:
         'date.timezone': 'Europe/Berlin'
   dependencies:
     before:
-      - pecl install ssh-beta
+      - composer install
   tests:
     override:
       -
