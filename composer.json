@@ -3,7 +3,8 @@
     "description": "Library for making international applications in Opulence easy.",
     "type": "library",
     "require": {
-        "opulence/opulence": "^1.0"
+        "opulence/opulence": "^1.0",
+        "mikey179/vfsStream": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.1"

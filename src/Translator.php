@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Foo\Translate;
 
-use Opulence\Framework\Configuration\Config;
-
 class Translator implements ITranslator
 {
     const DEFAULT_LANGUAGE = 'DEFAULT_LANGUAGE';
+
+    /** @var Loader */
+    protected $loader;
 
     /** @var string */
     protected $lang;
@@ -16,35 +17,51 @@ class Translator implements ITranslator
     /** @var array */
     protected $translations = [];
 
-    public function getTranslations(): array
+    /**
+     * Translator constructor.
+     *
+     * @param Loader $loader
+     */
+    public function __construct(Loader $loader)
     {
-        if (null === $this->translations) {
-            $dir = sprintf('%s/%s/', Config::get('paths', 'resources.lang'), $this->getLang());
+        $this->loader = $loader;
+    }
 
-            if (is_dir($dir)) {
-                foreach (scandir($dir) as $file) {
-                    // Skip non-PHP files
-                    if (strlen($file) < 4 || substr($file, -4) !== '.php') {
-                        continue;
-                    }
-
-                    $content = require $dir . $file;
-                    $this->setTranslations($content, substr($file, 0, -4), $this->getLang());
-                }
-            }
+    /**
+     * @param string
+     *
+     * @return array
+     */
+    public function getTranslations(string $lang): array
+    {
+        if (!array_key_exists($lang, $this->translations)) {
+            $this->translations[$lang] = $this->loader->loadTranslations($lang);
         }
 
-        return $this->translations;
+        if (empty($this->translations[$lang])) {
+            throw new Exception("{{language is missing: $lang}}");
+        }
+
+        return $this->translations[$lang];
     }
+
 
     /**
      * @param array  $translations
      * @param string $key
      * @param string $lang
      */
-    public function setTranslations(array $translations, string $key = '', string $lang = 'en')
+    public function setTranslations(array $translations, string $key = null, string $lang = null)
     {
-        if ('' === $key) {
+        if (null === $lang && null === $key) {
+            $this->translations = $translations;
+
+            return;
+        } elseif (null === $lang) {
+            $lang = 'en';
+        }
+
+        if (null === $key) {
             $this->translations[$lang] = $translations;
 
             return;
@@ -116,11 +133,7 @@ class Translator implements ITranslator
     {
         $pathParts = explode(':', $key);
 
-        if (!array_key_exists($this->lang, $this->translations)) {
-            throw new Exception('{{language is missing: ' . $this->lang . '}}');
-        }
-
-        $translations = &$this->translations[$this->lang];
+        $translations = $this->getTranslations($this->getLang());
         foreach ($pathParts as $pathPart) {
             if (!array_key_exists($pathPart, $translations)) {
                 throw new Exception("{{translation is missing: $key}}");

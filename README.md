@@ -93,7 +93,7 @@ class Login
 Notes
 -----
 
-1. The library will default to use *en* as default language if one is not provided.
+1. The library will default to use English (*en*) as default language if one is not provided.
 2. The bootrapper is not Lazy loaded, because international application usually need translations throughout the application.
 3. At the moment translations are not cached, but that's a planned feature.
 

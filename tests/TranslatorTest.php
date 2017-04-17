@@ -12,28 +12,34 @@ class TranslatorTest extends TestCase
     protected $sut;
 
     /** @var array */
-    protected $translations
-        = [
-            'en' => [
-                'application' => [
-                    'joe' => 'Joe',
-                    'charles' => 'Charles: %s %d'
-                ]
+    protected $translations = [
+        'en' => [
+            'application' => [
+                'joe'     => 'Joe',
+                'charles' => 'Charles: %s %d',
             ],
-            'hu' => [
-                'application' => [
-                    'joe' => 'József',
-                    'charles' => 'Károly: %s %d'
-                ]
+        ],
+        'hu' => [
+            'application' => [
+                'joe'     => 'József',
+                'charles' => 'Károly: %s %d',
             ],
-        ];
+        ],
+    ];
+
+    /** @var Loader|\PHPUnit_Framework_MockObject_MockObject */
+    protected $loaderStub;
 
     public function setUp()
     {
-        $this->sut = new Translator();
+        $this->loaderStub = $this->getMockBuilder(Loader::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['loadTranslations'])
+            ->getMock();
 
-        $this->sut->setTranslations($this->translations['en'], '', 'en');
-        $this->sut->setTranslations($this->translations['hu'], '', 'hu');
+        $this->sut = new Translator($this->loaderStub);
+
+        $this->sut->setTranslations($this->translations);
     }
 
     /**
@@ -42,35 +48,35 @@ class TranslatorTest extends TestCase
     public function translateDataProvider()
     {
         return [
-            'en-simple' => [
+            'en-simple'                    => [
                 'en',
                 'application:joe',
                 [],
                 'Joe',
             ],
-            'en-with-arguments' => [
+            'en-with-arguments'            => [
                 'en',
                 'application:charles',
                 ['foo', 6],
                 'Charles: foo 6',
             ],
-            'hu-simple' => [
+            'hu-simple'                    => [
                 'hu',
                 'application:joe',
                 [],
-                'József'
+                'József',
             ],
-            'hu-with-arguments' => [
+            'hu-with-arguments'            => [
                 'hu',
                 'application:charles',
                 ['foo', 6],
-                'Károly: foo 6'
+                'Károly: foo 6',
             ],
             'hu-with-argument-translation' => [
                 'hu',
                 'application:charles',
                 ['{{application:joe}}', 42],
-                'Károly: József 42'
+                'Károly: József 42',
             ],
         ];
     }
