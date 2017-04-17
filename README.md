@@ -7,6 +7,8 @@ Library for making international applications in Opulence easy.
 [![License](https://poser.pugx.org/peteraba/foo-translate/license)](https://packagist.org/packages/peteraba/foo-translate)
 [![composer.lock](https://poser.pugx.org/peteraba/foo-translate/composerlock)](https://packagist.org/packages/peteraba/foo-translate)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/peteraba/FooTranslate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/peteraba/FooTranslate/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/peteraba/FooTranslate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/peteraba/FooTranslate/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/peteraba/FooTranslate/badges/build.png?b=master)](https://scrutinizer-ci.com/g/peteraba/FooTranslate/build-status/master)
 
 Setup
 -----
