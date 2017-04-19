@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class LoaderTest extends TestCase
 {
-    const DIR = '/exampleDir';
+    const DIR = 'exampleDir';
 
     /**
      * @var array
@@ -52,56 +52,57 @@ class LoaderTest extends TestCase
                 'skipped.txt' => 'kiterdekel',
             ],
         ];
-        vfsStream::setup('root', null, $structure);
+
+        $this->root = vfsStream::setup(static::DIR, null, $structure);
     }
 
-    public function testLoadTranslationsWithoutCacheWithoutFiles()
+    public function testLoadTranslationsReturnsEmptyArrayWithoutFilesAndWithoutCache()
     {
-        $lang = 'hu';
-
-        $sut = new Loader(static::DIR, null);
-
-        $actualResult = $sut->loadTranslations($lang);
-
-        $this->assertSame([], $actualResult);
-    }
-
-    public function testLoadTranslationsWithCacheWithoutFiles()
-    {
-        $lang            = 'hu';
-        $cacheBridgeStub = new ArrayBridge();
-
-        $sut = new Loader(static::DIR, $cacheBridgeStub);
-
-        $actualResult = $sut->loadTranslations($lang);
-
-        $this->assertSame([], $actualResult);
-    }
-
-    public function testLoadTranslationsWithoutCacheWithFiles()
-    {
-        $this->markTestSkipped();
-
         $lang = 'hu';
 
         $sut = new Loader('', null);
 
         $actualResult = $sut->loadTranslations($lang);
 
-        $this->assertSame($this->expectedResult[$lang], $actualResult);
+        $this->assertSame([], $actualResult);
     }
 
-    public function testLoadTranslationsWithCacheWithFiles()
+    public function testLoadTranslationsReturnsEmptyArrayWithoutFilesWithEmptyCache()
     {
-        $this->markTestSkipped();
+        $lang        = 'hu';
+        $cacheBridge = new ArrayBridge();
 
-        $lang            = 'hu';
-        $cacheBridgeStub = new ArrayBridge();
-
-        $sut = new Loader('', $cacheBridgeStub);
+        $sut = new Loader('', $cacheBridge);
 
         $actualResult = $sut->loadTranslations($lang);
 
-        $this->assertSame($this->expectedResult[$lang], $actualResult);
+        $this->assertSame([], $actualResult);
+    }
+
+    public function testLoadTranslationsCanLoadTranslationsFromFiles()
+    {
+        $lang = 'hu';
+
+        $sut = new Loader(vfsStream::url(static::DIR), null);
+
+        $actualResult = $sut->loadTranslations($lang);
+
+        $this->assertEquals($this->expectedResult[$lang], $actualResult);
+    }
+
+    public function testLoadTranslationsCanLoadTranslationsFromCacheOncePopulated()
+    {
+        $lang        = 'hu';
+        $cacheBridge = new ArrayBridge();
+
+        $sut = new Loader(vfsStream::url(static::DIR), $cacheBridge);
+
+        $sut->loadTranslations($lang);
+
+        rmdir(vfsStream::url(static::DIR));
+
+        $actualResult = $sut->loadTranslations($lang);
+
+        $this->assertEquals($this->expectedResult[$lang], $actualResult);
     }
 }

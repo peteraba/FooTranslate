@@ -82,10 +82,10 @@ class Loader
                 continue;
             }
 
-            $content   = require $dir . $file;
+            $content   = require $dir . '/' . $file;
             $namespace = substr($file, 0, -4);
 
-            $translations[$lang][$namespace] = $content;
+            $translations[$namespace] = $content;
         }
 
         return $translations;
