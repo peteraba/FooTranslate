@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Foo\Translate;
 
@@ -24,8 +24,7 @@ class Loader
      * @param string            $directory
      * @param ICacheBridge|null $cacheBridge
      */
-    public function __construct(string $directory, ICacheBridge $cacheBridge = null)
-    {
+    public function __construct(string $directory, ICacheBridge $cacheBridge = null) {
         $this->directory   = $directory;
         $this->cacheBridge = $cacheBridge;
     }
