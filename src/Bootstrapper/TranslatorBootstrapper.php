@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Foo\Translate\Bootstrapper;
 
@@ -19,8 +19,7 @@ class TranslatorBootstrapper extends Bootstrapper
      * @param ITranspiler $transpiler
      * @param Translator  $translator
      */
-    public function run(ITranspiler $transpiler, Translator $translator)
-    {
+    public function run(ITranspiler $transpiler, Translator $translator) {
         $transpiler->registerViewFunction(
             'tr',
             function (string $key, ...$args) use ($translator) {
@@ -32,8 +31,7 @@ class TranslatorBootstrapper extends Bootstrapper
     /**
      * @param IContainer $container
      */
-    public function registerBindings(IContainer $container)
-    {
+    public function registerBindings(IContainer $container) {
         $cacheBridge = null;
         if ($container->hasBinding(ICacheBridge::class)) {
             $cacheBridge = $container->resolve(ICacheBridge::class);

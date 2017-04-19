@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Foo\Translate;
 
@@ -22,8 +22,7 @@ class Translator implements ITranslator
      *
      * @param Loader $loader
      */
-    public function __construct(Loader $loader)
-    {
+    public function __construct(Loader $loader) {
         $this->loader = $loader;
     }
 
@@ -51,8 +50,7 @@ class Translator implements ITranslator
      * @param string $key
      * @param string $lang
      */
-    public function setTranslations(array $translations, string $key = null, string $lang = null)
-    {
+    public function setTranslations(array $translations, string $key = null, string $lang = null) {
         if (null === $lang && null === $key) {
             $this->translations = $translations;
 
