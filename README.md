@@ -1,7 +1,7 @@
 FooTranslate
 ============
 
-Library for making international applications in Opulence easy.
+Library for making multilingual applications in [Opulence](https://www.opulencephp.com/) easy.
 
 [![Build Status](https://travis-ci.org/peteraba/FooTranslate.svg?branch=master)](https://travis-ci.org/peteraba/FooTranslate)
 [![License](https://poser.pugx.org/peteraba/foo-translate/license)](https://packagist.org/packages/peteraba/foo-translate)
