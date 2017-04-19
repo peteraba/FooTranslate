@@ -172,4 +172,64 @@ class TranslatorTest extends TestCase
 
         $this->assertSame($expectedResult, $actualResult);
     }
+
+    public function testSetTranslationsReplacesAllTranslationsByDefault()
+    {
+        $foo = ['en' => ['foo' => ['bar' => 'BAR']]];
+
+        $this->sut->setTranslations($foo);
+
+        $this->assertEquals($foo['en'], $this->sut->getTranslations('en'));
+    }
+
+    public function testSetTranslationsReplacesOneKeyOfOneLanguageIfBothAreDefined()
+    {
+        $foo = ['foo' => ['bar' => 'BAR']];
+
+        $this->sut->setTranslations($foo, 'application', 'hu');
+
+        $this->assertEquals($foo, $this->sut->getTranslations('hu')['application']);
+    }
+
+    public function testSetTranslationsCanReplaceTranslationsForALanguageCompletely()
+    {
+        $foo = ['foo' => ['bar' => 'BAR']];
+
+        $this->sut->setTranslations($foo, null, 'hu');
+
+        $this->assertEquals($foo, $this->sut->getTranslations('hu'));
+    }
+
+    public function testSetTranslationsUsesEnglishByDefault()
+    {
+        $foo = ['foo' => ['bar' => 'BAR']];
+
+        $this->sut->setTranslations($foo, 'application');
+
+        $this->assertEquals($foo, $this->sut->getTranslations('en')['application']);
+    }
+
+    public function testSetTranslationsUsesCurrentLangIfDefined()
+    {
+        $foo = ['foo' => ['bar' => 'BAR']];
+
+        $this->sut->setLang('hu');
+        $this->sut->setTranslations($foo, 'application');
+
+        $this->assertEquals($foo, $this->sut->getTranslations('hu')['application']);
+    }
+
+    public function testGetTranslationsLoadsTranslationsIfNotFound()
+    {
+        $foo = ['foo' => ['bar' => 'BAR']];
+
+        $this->loaderStub
+            ->expects($this->atLeastOnce())
+            ->method('loadTranslations')
+            ->willReturn($foo);
+
+        $actualResult = $this->sut->getTranslations('pl');
+
+        $this->assertEquals($foo, $actualResult);
+    }
 }

@@ -12,7 +12,7 @@ class Translator implements ITranslator
     protected $loader;
 
     /** @var string */
-    protected $lang;
+    protected $lang = 'en';
 
     /** @var array */
     protected $translations = [];
@@ -57,9 +57,9 @@ class Translator implements ITranslator
             $this->translations = $translations;
 
             return;
-        } elseif (null === $lang) {
-            $lang = 'en';
         }
+
+        $lang = $lang ?? $this->getLang();
 
         if (null === $key) {
             $this->translations[$lang] = $translations;
